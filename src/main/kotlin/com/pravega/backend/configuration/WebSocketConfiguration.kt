@@ -1,20 +1,18 @@
 package com.pravega.backend.configuration
 
+import com.pravega.backend.controllers.WebSocketHandler
+import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.messaging.simp.config.MessageBrokerRegistry
-import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker
-import org.springframework.web.socket.config.annotation.StompEndpointRegistry
-import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer
+import org.springframework.web.socket.config.annotation.*
 
 @Configuration
-@EnableWebSocketMessageBroker
-class WebSocketConfiguration: WebSocketMessageBrokerConfigurer {
-    override fun configureMessageBroker(registry: MessageBrokerRegistry) {
-        registry.enableSimpleBroker("/broker")
-        registry.setApplicationDestinationPrefixes("/ws")
+@EnableWebSocket
+class WebSocketConfiguration: WebSocketConfigurer {
+    override fun registerWebSocketHandlers(registry: WebSocketHandlerRegistry) {
+        registry.addHandler(WebSocketHandler(), "/myHandler")
     }
 
-    override fun registerStompEndpoints(registry: StompEndpointRegistry) {
-        registry.addEndpoint("/websocket")
-    }
+    @Bean
+    fun handler() = WebSocketHandler()
 }

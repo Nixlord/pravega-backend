@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Configuration
 import javax.sql.DataSource
 
 
+// Need different params on Heroku.
+// Also get from environment variables.
 @Configuration
 class DataSourceConfiguration {
     @Bean

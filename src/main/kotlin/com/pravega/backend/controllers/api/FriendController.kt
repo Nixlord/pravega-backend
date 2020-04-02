@@ -11,9 +11,9 @@ class FriendController {
     lateinit var jdbcTemplate: JdbcTemplate
 
     @GetMapping("/friends")
-    fun getAllFriends(): List<String> {
+    fun getAllFriends(): List<Pair<String, Int>> {
         return jdbcTemplate.query("SELECT * FROM friends ORDER BY age desc") { result, _ ->
-            result.getString("name")
+            Pair(result.getString("name"), result.getInt("age"))
         }
     }
 }

@@ -10,13 +10,33 @@ import javax.sql.DataSource
 // Also get from environment variables.
 @Configuration
 class DataSourceConfiguration {
+
+    fun getEnv(value: String, defaultValue: String): String {
+        val res = System.getenv(value);
+        if (res != null)
+            return res;
+        else
+            return defaultValue
+    }
+
+
+    fun credential(type: String): String {
+        return when(type) {
+            "url" -> getEnv("JDBC_DATABASE_URL", "jdbc:pgsql://localhost:5432/dev")
+            "username" -> getEnv("JDBC_DATABASE_USERNAME", "postgres")
+            "password" -> getEnv("JDBC_DATABASE_PASSWORD", "postgres")
+            else -> "ERROR_TYPE"
+        }
+    }
+
+
     @Bean
     fun dataSource(): DataSource {
         return DataSourceBuilder.create()
                 .driverClassName("com.impossibl.postgres.jdbc.PGDriver")
-                .url("jdbc:pgsql://localhost:5432/dev")
-                .username("postgres")
-                .password("postgres")
+                .url(credential("url"))
+                .username(credential("username"))
+                .password(credential("password"))
                 .build();
     }
 }

@@ -12,7 +12,7 @@ class FriendController {
 
     @GetMapping("/friends")
     fun getAllFriends(): List<String> {
-        return jdbcTemplate.query("SELECT * FROM friends") { result, _ ->
+        return jdbcTemplate.query("SELECT * FROM friends ORDER BY age desc") { result, _ ->
             result.getString("name")
         }
     }

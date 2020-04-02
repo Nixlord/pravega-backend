@@ -22,7 +22,7 @@ class DataSourceConfiguration {
 
     fun credential(type: String): String {
         return when(type) {
-            "url" -> getEnv("JDBC_DATABASE_URL", "jdbc:pgsql://localhost:5432/dev")
+            "url" -> getEnv("JDBC_DATABASE_URL", "jdbc:pgsql://localhost:5432/dev").replace("jdbc:postgresql", "jdbc:pgsql")
             "username" -> getEnv("JDBC_DATABASE_USERNAME", "postgres")
             "password" -> getEnv("JDBC_DATABASE_PASSWORD", "postgres")
             else -> "ERROR_TYPE"

@@ -1,4 +1,4 @@
-package com.pravega.backend.controllers.http
+package com.pravega.backend.controllers.api
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.JdbcTemplate

@@ -1,4 +1,4 @@
-package com.pravega.backend.controllers.api
+package com.pravega.backend.controllers.api.friends
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.JdbcTemplate
@@ -14,11 +14,13 @@ class FriendController {
     lateinit var jdbcTemplate: JdbcTemplate
 
     @GetMapping("/friends")
-    fun getAllFriends(): HashMap<String, Pair<String, Int>> {
+    fun getAllFriends(): HashMap<Int, Friend> {
         // Write better Kotlin code
-        val results = hashMapOf<String, Pair<String, Int>>()
+        val results = hashMapOf<Int, Friend>()
+        var id = 0
         jdbcTemplate.query("SELECT * FROM friends ORDER BY age desc") { result, _ ->
-            results[UUID.randomUUID().toString()] = Pair(result.getString("name"), result.getInt("age"))
+            results[id] = Friend(result.getString("name"), result.getInt("age"))
+            id += 1
         }
         return results;
     }

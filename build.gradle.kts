@@ -40,7 +40,7 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	implementation("com.impossibl.pgjdbc-ng:pgjdbc-ng:0.8.3")
-	implementation("com.pusher:pusher-http-java:1.0.0")
+	implementation("com.google.firebase:firebase-admin:6.13.0")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 	testImplementation("org.springframework.boot:spring-boot-starter-test") {

@@ -1,6 +1,7 @@
 package com.pravega.backend.controllers
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.pravega.backend.controllers.api.friends.Friend
 import org.springframework.core.AttributeAccessor
@@ -20,7 +21,7 @@ import reactor.netty.http.websocket.WebsocketInbound
 
 class WebSocketHandler: TextWebSocketHandler() {
     // Use custom deserializer to diff COMMAND/DATA messages
-    private val objectMapper = ObjectMapper()
+    private val objectMapper = ObjectMapper().registerModule(KotlinModule())
     override fun handleTransportError(session: WebSocketSession, exception: Throwable) {
         super.handleTransportError(session, exception)
     }
@@ -30,11 +31,11 @@ class WebSocketHandler: TextWebSocketHandler() {
     }
 
     override fun handleTextMessage(session: WebSocketSession, message: TextMessage) {
-        session.sendMessage(TextMessage(message.payload))
-//        val friend = objectMapper.readValue(message.payload, Friend::class.java)
-//        println("WEBSOCKET SERVER");
-//        println(friend)
-//        session.sendMessage(TextMessage(objectMapper.writeValueAsString(friend)))
+//        session.sendMessage(TextMessage(message.payload))
+        val friend = objectMapper.readValue(message.payload, Friend::class.java)
+        println("WEBSOCKET SERVER");
+        println(friend)
+        session.sendMessage(TextMessage(objectMapper.writeValueAsString(friend)))
     }
 
     override fun afterConnectionEstablished(session: WebSocketSession) {

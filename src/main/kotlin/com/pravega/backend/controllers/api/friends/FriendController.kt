@@ -1,6 +1,10 @@
 package com.pravega.backend.controllers.api.friends
 
+import com.impossibl.postgres.api.jdbc.PGConnection
+import com.impossibl.postgres.api.jdbc.PGNotificationListener
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.context.event.ApplicationReadyEvent
+import org.springframework.context.event.EventListener
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
@@ -9,7 +13,10 @@ import java.util.stream.Collectors
 import kotlin.collections.HashMap
 
 @RestController
-class FriendController {
+class FriendController() {
+    @Autowired
+    var connection: PGConnection? = null
+
     @Autowired
     lateinit var jdbcTemplate: JdbcTemplate
 
@@ -23,5 +30,28 @@ class FriendController {
             id += 1
         }
         return results;
+    }
+
+    @EventListener
+    fun onReady(event: ApplicationReadyEvent) {
+        println("OnReady")
+        if (connection == null) {
+            println("Null connection")
+        }
+        connection?.apply {
+            createStatement().apply {
+                execute("LISTEN new_friend")
+                close()
+            }
+            addNotificationListener(
+                    object : PGNotificationListener {
+                        override fun notification(processId: Int, channelName: String?, payload: String?) {
+                            super.notification(processId, channelName, payload)
+                            println(channelName)
+                            println(payload)
+                        }
+                    }
+            )
+        }
     }
 }

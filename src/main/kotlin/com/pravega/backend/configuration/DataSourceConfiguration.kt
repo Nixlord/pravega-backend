@@ -1,5 +1,7 @@
 package com.pravega.backend.configuration
 
+import com.impossibl.postgres.api.jdbc.PGConnection
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.jdbc.DataSourceBuilder
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -38,5 +40,10 @@ class DataSourceConfiguration {
                 .username(credential("username"))
                 .password(credential("password"))
                 .build();
+    }
+
+    @Bean
+    fun getPGConnection(@Autowired dataSource: DataSource): PGConnection? {
+        return dataSource.connection?.unwrap(PGConnection::class.java)
     }
 }
